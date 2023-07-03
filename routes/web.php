@@ -21,10 +21,14 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\Frontend\FrontEndController::class, 'index']);
-Route::get('/collections', [App\Http\Controllers\Frontend\FrontEndController::class, 'categories']);
-Route::get('/collections/{categorySlug}', [App\Http\Controllers\Frontend\FrontEndController::class, 'products']);
-Route::get('/collections/{categorySlug}/{productSlug}', [App\Http\Controllers\Frontend\FrontEndController::class, 'productView']);
+Route::get('/', [App\Http\Controllers\Frontend\FrontendController::class, 'index']);
+Route::get('/collections', [App\Http\Controllers\Frontend\FrontendController::class, 'categories']);
+Route::get('/collections/{categorySlug}', [App\Http\Controllers\Frontend\FrontendController::class, 'products']);
+Route::get('/collections/{categorySlug}/{productSlug}', [App\Http\Controllers\Frontend\FrontendController::class, 'productView']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/wishlist', [App\Http\Controllers\Frontend\WishlistController::class, 'index']);
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

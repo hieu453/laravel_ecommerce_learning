@@ -8,11 +8,23 @@ use Illuminate\Support\Facades\Auth;
 
 class View extends Component
 {
-    public $product, $category, $productColorSelectedQuantity;
+    public $product, $category, $productColorSelectedQuantity, $count = 1;
 
     public function mount($product, $category) {
         $this->product = $product;
         $this->category = $category;
+    }
+
+    public function decrement() {
+        if ($this->count > 1) {
+            $this->count--;
+        }
+    }
+
+    public function increment() {
+        if ($this->count < 10) {
+            $this->count++;
+        }
     }
 
     public function colorSelected($productColorId) {
@@ -27,7 +39,6 @@ class View extends Component
     public function addToWishlist($productId) {
         if (Auth::check()) {
             if (Wishlist::where('user_id', auth()->user()->id)->where('product_id', $productId)->exists()) {
-                session()->flash('message', 'Already add to wishlish');
                 $this->dispatchBrowserEvent('message', [
                     'text' => 'Already add to wishlish',
                     'type' => 'success',
@@ -38,7 +49,7 @@ class View extends Component
                     'user_id' => auth()->user()->id,
                     'product_id' => $productId,
                 ]);
-                session()->flash('message', 'Wishlist added');
+                $this->emit('updateWishlist');
                 $this->dispatchBrowserEvent('message', [
                     'text' => 'Wishlist added',
                     'type' => 'success',
@@ -46,7 +57,6 @@ class View extends Component
                 ]);
             }
         } else {
-            session()->flash('message', 'Please login to add to wishlist');
             $this->dispatchBrowserEvent('message', [
                 'text' => 'Please login to add to wishlist',
                 'type' => 'info',
