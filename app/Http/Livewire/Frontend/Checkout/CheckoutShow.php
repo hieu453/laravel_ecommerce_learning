@@ -14,6 +14,11 @@ class CheckoutShow extends Component
     public $totalAmount;
     public $fullname, $phone, $email, $pincode, $address, $payment_mode, $payment_id = null;
 
+    protected $listeners = [
+        'validateForAll',
+        'transactionEmit' => 'onlineOrder'
+    ];
+    
     protected $rules = [
         'fullname' => 'required|string|min:4|max:255',
         'email' => 'required|email|max:255',
@@ -29,9 +34,27 @@ class CheckoutShow extends Component
         'email.email' => 'Email không hợp lệ nhé tml.',
     ];
 
-    public function updated($fullname)
-    {
-        $this->validateOnly($fullname);
+    public function updated($pincode) {
+        $this->validateOnly($pincode);
+    }
+
+    public function validateForAll() {
+        $this->validate();
+    }
+
+    public function onlineOrder($transactionId) {
+        $this->payment_id = $transactionId;
+        $this->payment_mode = 'Paypal';
+      
+        $this->placeOrder();
+        Cart::where('user_id', auth()->user()->id)->delete();
+        $this->emit('cartUpdated');
+        $this->dispatchBrowserEvent('message', [
+            'text' => 'Đặt hàng thành công',
+            'type' => 'success',
+            'status' => 200
+        ]);
+        return redirect()->to('/thank-you');
     }
 
     public function placeOrder() {
@@ -66,7 +89,6 @@ class CheckoutShow extends Component
                 $cart->product()->where('id', $cart->product_id)->decrement('quantity', $cart->quantity);
             }
         }
-
     }
 
     public function codOrder() {
