@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+//Route for admin
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
 
@@ -80,6 +81,15 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         Route::get('/sliders/{slider}/edit', 'edit');
         Route::put('/sliders/{slider}', 'update');
         Route::get('/sliders/{slider}/delete', 'destroy');
+    });
+
+    //Order routes
+    Route::controller(App\Http\Controllers\Admin\OrderController::class)->group(function () {
+        Route::get('/orders', 'index');
+        Route::get('/orders/{orderId}', 'show');
+        Route::put('/orders/{orderId}', 'updateStatus');
+        Route::get('/invoice/{orderId}', 'viewInvoice');
+        Route::get('/invoice/{orderId}/generate', 'pdfGenerate');
     });
 
     //Livewire Brand route
