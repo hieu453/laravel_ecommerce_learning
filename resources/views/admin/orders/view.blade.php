@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Order Details')
 
@@ -9,7 +9,9 @@
             <div class="shadow bg-white p-3">
                 <h4 class="text-primary">
                     <i class="fa fa-shopping-cart text-dark">My Order Details</i>
-                    <a href="{{ url('orders/') }}" class="btn btn-primary btn-sm float-end">Back</a>
+                    <a href="{{ url('admin/orders/') }}" class="btn btn-danger btn-sm float-end">Back</a>
+                    <a href="{{ url('admin/invoice/'.$order->id) }}" class="btn btn-warning btn-sm float-end mx-2">View</a>
+                    <a href="{{ url('admin/invoice/'.$order->id.'/generate') }}" class="btn btn-primary btn-sm float-end">Download</a>
                 </h4>
                 <hr>
                 <div class="row">
@@ -21,7 +23,7 @@
                         <h6>Ordered date: {{ $order->created_at->format('d-m-Y') }}</h6>
                         <h6>Payment mode: {{ $order->payment_mode }}</h6>
                         <h6 class="border p-2 text-success">
-                            Order status message: <span class="text-uppercase">in progress</span>
+                            Order status message: <span class="text-uppercase">{{ $order->status_message }}</span>
                         </h6>
                     </div>
                     <div class="col-md-6">
@@ -47,7 +49,7 @@
                             <th>Total</th>
                         </thead>
                         <tbody>
-                            {{ $total = 0 }}
+                            @php $total = 0 @endphp
                             @forelse ($order->orderItems as $orderItem)
                                 <tr>
                                     <td>{{ $orderItem->id }}</td>
@@ -69,7 +71,7 @@
                                     <td>{{ $orderItem->price }}</td>
                                     <td>{{ $orderItem->quantity }}</td>
                                     <td class="fw-bold">{{ $orderItem->price * $orderItem->quantity }}$</td>
-                                    {{ $total += $orderItem->price * $orderItem->quantity }}
+                                    @php $total += $orderItem->price * $orderItem->quantity @endphp
                                 </tr>
                             @empty
                                 <tr>
@@ -82,6 +84,31 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Update Order Process</h4>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <form action="{{ url('admin/orders/'.$order->id) }}" method="POST"> 
+                                    @csrf
+                                    @method('PUT')
+                                    <select name="status" class="form-select">
+                                        <option value="">Select status</option>
+                                        <option value="in progress" {{ $order->status_message == 'in progress' ? 'selected' : '' }}>In Progress</option>
+                                        <option value="complete" {{ $order->status_message == 'complete' ? 'selected' : '' }}>Complete</option>
+                                        <option value="pending" {{ $order->status_message == 'pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="cancelled" {{ $order->status_message == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                        <option value="out for delivery" {{ $order->status_message == 'out for delivery' ? 'selected' : '' }}>Out for delivery</option>
+                                    </select>
+                                    <br>
+                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
