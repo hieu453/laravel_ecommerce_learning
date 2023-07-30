@@ -30,11 +30,10 @@ class LoginController extends Controller
     // protected $redirectTo = RouteServiceProvider::HOME;
 
     protected function showLoginForm() {
-        $previousURL = url()->previous();
-        $baseURL = url()->to('/');
-
-        if ($previousURL != $baseURL.'/login') {
+        if (!session()->has('url.intended')) {
+            $previousURL = url()->previous();
             session()->put('url.intended', $previousURL);
+            
         }
         return view('auth.login');
     }
@@ -44,8 +43,19 @@ class LoginController extends Controller
             return redirect('/admin/dashboard')->with('message', 'Welcome to Dashboard');
         } else {
             // return redirect('/home')->with('status', 'Logged In successfully');
+            // return redirect(session('url.intended'));
             $this->showLoginForm();
         }
+    }
+
+    public function logout() {
+        if (!session()->has('url.intended')) {
+            $previousURL = url()->previous();
+            session()->put('previous.url', $previousURL);
+            
+        }
+        Auth::logout();
+        return redirect()->to(session('previous.url'));
     }
 
     /**
