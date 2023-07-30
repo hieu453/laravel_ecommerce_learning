@@ -49,13 +49,7 @@
     <li class="nav-item">
       <a class="nav-link" href="{{ url('admin/sliders') }}">
         <i class="mdi mdi-circle-outline menu-icon"></i>
-        <span class="menu-title">Sliders</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url('admin/orders') }}">
-        <i class="mdi mdi-circle-outline menu-icon"></i>
-        <span class="menu-title">Orders</span>
+        <span class="menu-title">Slider</span>
       </a>
     </li>
     <li class="nav-item">

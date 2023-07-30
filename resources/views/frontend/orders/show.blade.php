@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'Order Details')
-
 @section('content')
 <div class="container">
     <div class="row">
@@ -47,7 +45,9 @@
                             <th>Total</th>
                         </thead>
                         <tbody>
-                            {{ $total = 0 }}
+                            @php
+                                $total = 0;   
+                            @endphp
                             @forelse ($order->orderItems as $orderItem)
                                 <tr>
                                     <td>{{ $orderItem->id }}</td>
