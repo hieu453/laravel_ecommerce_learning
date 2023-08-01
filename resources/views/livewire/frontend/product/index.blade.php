@@ -39,7 +39,7 @@
                             @endif
                             
                             @if ($product->productImages->count() > 0)
-                            <a href="{{ url('/collections/'.$product->category->slug.'/'.$product->name) }}">
+                            <a href="{{ url('/collections/'.$product->category->slug.'/'.$product->slug) }}">
                                 <img src="{{ asset($product->productImages[0]->image) }}" alt="{{ $product->name }}">
                             </a>
                             @endif
@@ -55,11 +55,6 @@
                                 <span class="selling-price">{{ '$' . number_format($product->selling_price, 2); }}</span>
                                 <span class="original-price">{{ '$' . number_format($product->original_price, 2); }}</span>
                             </div>
-                            {{-- <div class="mt-2">
-                                <a href="" class="btn btn1">Add To Cart</a>
-                                <a href="" class="btn btn1"> <i class="fa fa-heart"></i> </a>
-                                <a href="" class="btn btn1"> View </a>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
