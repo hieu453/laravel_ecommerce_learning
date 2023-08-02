@@ -21,6 +21,14 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 
+Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::get('/collections', 'categories');
+    Route::get('/collections/{categorySlug}', 'products');
+    Route::get('/collections/{categorySlug}/{productSlug}', 'productView');
+    Route::get('/new-arrivals', 'newArrivals');
+});
+
 Route::get('/', [App\Http\Controllers\Frontend\FrontendController::class, 'index']);
 Route::get('/collections', [App\Http\Controllers\Frontend\FrontendController::class, 'categories']);
 Route::get('/collections/{categorySlug}', [App\Http\Controllers\Frontend\FrontendController::class, 'products']);

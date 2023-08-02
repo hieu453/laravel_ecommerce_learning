@@ -42,4 +42,9 @@ class FrontendController extends Controller
             return redirect()->back();
         }
     }
+
+    public function newArrivals() {
+        $newArrivals = Product::latest()->get();
+        return view('frontend.pages.new-arrivals', compact('newArrivals'));
+    }
 }
