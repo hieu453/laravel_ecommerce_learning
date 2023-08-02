@@ -86,7 +86,7 @@
     nav:true,
     pagination:true,
     autoplay:true,
-    autoplayTimeout:2000,
+    autoplayTimeout:3000,
     responsive:{
         0:{
             items:1

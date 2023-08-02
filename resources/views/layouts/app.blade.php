@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css') }}">
 
+    {{-- Exzoom --}}
+    <link rel="stylesheet" href="{{ asset('assets/exzoom/jquery.exzoom.css') }}">
+
     {{-- Css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
@@ -47,7 +50,8 @@
     <script src="{{ asset('assets/js/jquery-3.6.4.min.js') }}"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
-    
+    <script src="{{ asset('assets/exzoom/jquery.exzoom.js') }}"></script>
+
     <script>
         window.addEventListener('message', event => {
             alertify.set('notifier','position', 'top-right');
