@@ -44,6 +44,8 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        @include('layouts.frontend.footer')
     </div>
 
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>

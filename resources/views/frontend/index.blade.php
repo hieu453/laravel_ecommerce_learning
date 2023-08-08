@@ -35,7 +35,7 @@
         <span class="visually-hidden">Next</span>
     </button>
 
-    <div class="py-5 bg-white">
+    <div class="py-5 bg-white" id="trending">
         <div class="container">
             <div class="div">
                 <h4>Trending Products</h4>
