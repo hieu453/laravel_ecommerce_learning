@@ -49,6 +49,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //Route for admin
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
+    
+    //Admin settings
+    Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index']);
+    Route::post('/settings', [App\Http\Controllers\Admin\SettingController::class, 'store']);
 
     //Category routes
     Route::controller(App\Http\Controllers\Admin\CategoryController::class)->group(function () {
