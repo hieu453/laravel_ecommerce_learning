@@ -23,17 +23,13 @@ Auth::routes();
 
 Route::controller(App\Http\Controllers\Frontend\FrontendController::class)->group(function () {
     Route::get('/', 'index');
+    Route::get('/search', 'search');
     Route::get('/collections', 'categories');
     Route::get('/collections/{categorySlug}', 'products');
     Route::get('/collections/{categorySlug}/{productSlug}', 'productView');
     Route::get('/new-arrivals', 'newArrivals');
     Route::get('/featured-products', 'featuredProducts');
 });
-
-Route::get('/', [App\Http\Controllers\Frontend\FrontendController::class, 'index']);
-Route::get('/collections', [App\Http\Controllers\Frontend\FrontendController::class, 'categories']);
-Route::get('/collections/{categorySlug}', [App\Http\Controllers\Frontend\FrontendController::class, 'products']);
-Route::get('/collections/{categorySlug}/{productSlug}', [App\Http\Controllers\Frontend\FrontendController::class, 'productView']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist', [App\Http\Controllers\Frontend\WishlistController::class, 'index']);
@@ -42,6 +38,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/thank-you', [App\Http\Controllers\Frontend\CheckoutController::class, 'thankYou']);
     Route::get('/orders', [App\Http\Controllers\Frontend\OrderController::class, 'index']);
     Route::get('/orders/{orderId}', [App\Http\Controllers\Frontend\OrderController::class, 'show']);
+    Route::get('/profile', [App\Http\Controllers\Frontend\UserController::class, 'index']);
+    Route::post('/profile', [App\Http\Controllers\Frontend\UserController::class, 'updateUserProfile']);
+    Route::get('/change-password', [App\Http\Controllers\Frontend\UserController::class, 'showChangePasswordPage']);
+    Route::post('/change-password', [App\Http\Controllers\Frontend\UserController::class, 'changePassword']);
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -49,8 +49,16 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //Route for admin
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index']);
+
+    //User route
+    Route::get('/users', [App\Http\Controllers\Admin\UserController::class, 'index']);
+    Route::get('/users/create', [App\Http\Controllers\Admin\UserController::class, 'create']);
+    Route::post('/users', [App\Http\Controllers\Admin\UserController::class, 'store']);
+    Route::get('/users/{userId}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit']);
+    Route::put('/users/{userId}', [App\Http\Controllers\Admin\UserController::class, 'update']);
+    Route::get('/users/{userId}/delete', [App\Http\Controllers\Admin\UserController::class, 'delete']);
     
-    //Admin settings
+    //Admin settings route
     Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index']);
     Route::post('/settings', [App\Http\Controllers\Admin\SettingController::class, 'store']);
 
@@ -103,6 +111,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         Route::put('/orders/{orderId}', 'updateStatus');
         Route::get('/invoice/{orderId}', 'viewInvoice');
         Route::get('/invoice/{orderId}/generate', 'pdfGenerate');
+        Route::get('/invoice/{orderId}/mail', 'mailInvoice');
     });
 
     //Livewire Brand route

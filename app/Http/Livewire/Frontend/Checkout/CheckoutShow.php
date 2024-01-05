@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire\Frontend\Checkout;
 
+use Exception;
 use App\Models\Cart;
 use App\Models\Order;
-use App\Models\OrderItem;
 use Livewire\Component;
+use App\Models\OrderItem;
 use Illuminate\Support\Str;
+use App\Mail\PlaceOrderMailable;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutShow extends Component
 {
@@ -89,13 +92,22 @@ class CheckoutShow extends Component
                 $cart->product()->where('id', $cart->product_id)->decrement('quantity', $cart->quantity);
             }
         }
+        return $order;
     }
 
     public function codOrder() {
         $this->payment_mode = 'COD';
       
-        $this->placeOrder();
+        $codOrder = $this->placeOrder();
         Cart::where('user_id', auth()->user()->id)->delete();
+
+        try {
+            $order = Order::findOrFail($codOrder->id);
+            Mail::to("$order->email")->send(new PlaceOrderMailable($order));
+        } catch (Exception $e) {
+            return $e;
+        }
+
         $this->emit('cartUpdated');
         $this->dispatchBrowserEvent('message', [
             'text' => 'Đặt hàng thành công',
@@ -117,6 +129,13 @@ class CheckoutShow extends Component
         $this->totalAmount = 0;
         $this->fullname = auth()->user()->name;
         $this->email = auth()->user()->email;
+
+        if (auth()->user() && auth()->user()->userDetail) {
+            $this->phone = auth()->user()->userDetail->phone;
+            $this->pincode = auth()->user()->userDetail->pincode;
+            $this->address = auth()->user()->userDetail->address;
+        }
+
         $this->itemTotalAmount();
         return view('livewire.frontend.checkout.checkout-show', [
             'totalAmount' => $this->totalAmount,

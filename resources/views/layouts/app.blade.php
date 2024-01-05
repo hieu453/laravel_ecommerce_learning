@@ -9,8 +9,8 @@
 
     <title>@yield('title')</title>
 
-    <meta name="meta_keyword" content="@yield('meta_keyword')"/>
-    <meta name="meta_description" content="@yield('meta_description')"/>
+    <meta name="meta_keyword" content="{{ $adminSettings->meta_keyword }}"/>
+    <meta name="meta_description" content="{{ $adminSettings->meta_description }}"/>
     <meta name="author" content="Funda of IT">
 
     <!-- Fonts -->
@@ -58,6 +58,23 @@
         window.addEventListener('message', event => {
             alertify.set('notifier','position', 'top-right');
             alertify.notify(event.detail.text, event.detail.type, 2);
+        })
+        
+        $('#search-input').on('input', function () {
+            const searchQuery = this.value;
+            if (searchQuery.length >= 3) {
+                fetch(`/search?query=${searchQuery}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const resultDiv = document.getElementById('search-result');
+                        resultDiv.innerHTML = '';
+                        data.forEach(result => {
+                            resultDiv.innerHTML += `<p><a href="/collections/${result.category_id}">${result.name}</a></p>`;
+                        });
+                    })
+            } else {
+                document.getElementById('search-result').innerHTML = ''
+            }
         })
         
     </script>

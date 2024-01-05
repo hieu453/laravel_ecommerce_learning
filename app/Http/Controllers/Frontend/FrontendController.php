@@ -13,7 +13,17 @@ class FrontendController extends Controller
     public function index() {
         $sliders = Slider::where('status', '0')->get();
         $trendingProducts = Product::where('trending', '1')->latest()->get();
-        return view('frontend.index', compact('sliders', 'trendingProducts'));
+        $newArrivals = Product::latest()->take(6)->get();
+        $featuredProducts = Product::where('featured', 1)->take(6)->get();
+        return view('frontend.index', compact('sliders', 'trendingProducts', 'newArrivals', 'featuredProducts'));
+    }
+
+    public function search(Request $request) {
+        $searchItems = $request->input('search');
+        $results = Product::where('name', 'LIKE', "%$searchItems%")->paginate(1);
+        $results->appends(['search' => $searchItems]);
+        
+        return view('frontend.pages.search-results', compact('results'));
     }
 
     public function categories() {

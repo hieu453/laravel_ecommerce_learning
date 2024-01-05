@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
-use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf;
 use Hamcrest\Arrays\IsArray;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Http\Controllers\Controller;
+use App\Mail\InvoiceOrderMailable;
+use Exception;
+use Illuminate\Support\Facades\Mail;
+use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf;
 
 class OrderController extends Controller
 {
@@ -47,5 +50,17 @@ class OrderController extends Controller
         $data = ['order' => $order];
         $pdf = LaravelMpdf::loadView('admin.invoice.view', $data);
         return $pdf->stream('order'.$order->id.'.pdf');
+    }
+
+    public function mailInvoice($orderId) {
+        $order = Order::findOrFail($orderId);
+
+        try {
+            Mail::to("$order->email")->send(new InvoiceOrderMailable($order));
+            return redirect('admin/orders/'.$order->id)->with('message', 'Email has sent!');
+        } catch (Exception $e) {
+            return redirect('admin/orders/'.$order->id)->with('message', 'Something went wrong!');
+        }
+
     }
 }

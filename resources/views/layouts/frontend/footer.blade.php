@@ -57,10 +57,10 @@
             <div class="col-md-4">
                 <div class="social-media">
                     Get Connected:
-                    <a href="https://facebook.com"><i class="fa fa-facebook"></i></a>
-                    <a href="https://twitter.com"><i class="fa fa-twitter"></i></a>
-                    <a href="https://instagram.com"><i class="fa fa-instagram"></i></a>
-                    <a href="https://youtube.com"><i class="fa fa-youtube"></i></a>
+                    <a href="{{ $adminSettings->facebook }}" target="_blank"><i class="fa fa-facebook"></i></a>
+                    <a href="{{ $adminSettings->twitter }}" target="_blank"><i class="fa fa-twitter"></i></a>
+                    <a href="{{ $adminSettings->instagram }}" target="_blank"><i class="fa fa-instagram"></i></a>
+                    <a href="{{ $adminSettings->youtube }}" target="_blank"><i class="fa fa-youtube"></i></a>
                 </div>
             </div>
         </div>

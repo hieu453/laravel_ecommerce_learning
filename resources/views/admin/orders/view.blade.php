@@ -12,6 +12,7 @@
                     <a href="{{ url('admin/orders/') }}" class="btn btn-danger btn-sm float-end">Back</a>
                     <a href="{{ url('admin/invoice/'.$order->id) }}" class="btn btn-warning btn-sm float-end mx-2">View</a>
                     <a href="{{ url('admin/invoice/'.$order->id.'/generate') }}" class="btn btn-primary btn-sm float-end">Download</a>
+                    <a href="{{ url('admin/invoice/'.$order->id.'/mail') }}" class="btn btn-info btn-sm float-end mx-2">Send invoice via Email</a>
                 </h4>
                 <hr>
                 <div class="row">

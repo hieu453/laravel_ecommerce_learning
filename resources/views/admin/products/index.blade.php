@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', 'Products')
+
 @section('content')
 <div>
     <div class="row">
@@ -16,7 +18,7 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered table-striped">
+                    <table id="my-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -63,4 +65,22 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('script')
+<script src="cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"></script>
+<script src="cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    let table = new DataTable('#my-table', {
+        "searching": true,
+        
+    });
+
+    $('#search-input').on('change', function(){
+        table
+        .column(3)
+        .search(this.value)
+        .draw();
+    });
+</script>
 @endsection
